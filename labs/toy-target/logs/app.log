@@ -1,0 +1,3 @@
+SupportBot lab target on http://127.0.0.1:5000  (model=llama3.2:3b)
+ * Serving Flask app 'app'
+ * Debug mode: off

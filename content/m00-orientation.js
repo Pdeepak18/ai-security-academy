@@ -1,145 +1,187 @@
 CONTENT["m00"] = {
   id: "m00",
   num: "00",
-  title: "Orientation: the AI security job map",
+  title: "Start here: what AI security is",
   tag: "Start here",
   hours: "1.5h",
-  blurb: "Six different jobs get advertised as 'AI security'. Pick one, learn what it screens for, and leave with a 90-day plan.",
+  blurb: "Begin with zero knowledge. Learn what AI actually is, the six jobs called 'AI security', and pick the one you will aim for.",
   outcomes: [
-    "Name the six AI-security job families and what each one actually does all day",
-    "Match your existing SOC/infra background to the shortest path into the field",
-    "Leave with a dated 13-week plan and the four portfolio artefacts you will build"
+    "Explain in one minute what an AI chatbot is and why companies need people to protect it",
+    "Name the six AI security jobs and say what each person does all day",
+    "Choose the job that fits your background and write one sentence about your goal"
   ],
-  project: "A written target: role, salary band, three companies, and a 13-week plan saved as a note you review weekly.",
+  project: "One sentence: which job you want, at what kind of company, and what proof you will build.",
   lessons: [
     {
       id: "m00-l1",
-      title: "The six jobs hiding behind 'AI security'",
+      title: "What is AI, and why does it need security?",
       minutes: 14,
-      tag: "orientation",
+      tag: "basics",
       body: [
-        { t: "p", text: "Recruiters throw 'AI security' at six genuinely different jobs. The work, the interview and the pay all differ. Pick a primary lane now and a secondary lane; you will study the same fundamentals either way, but the labs and the resume bullets diverge." },
-        { t: "table", head: ["Role", "What the day actually looks like", "What they screen for"], rows: [
-          ["AI Security Engineer", "Reviews LLM app designs, builds guardrails, does authz for tools, fixes OWASP LLM issues in code", "AppSec fundamentals, secure design, Python, OWASP LLM Top 10, threat modelling"],
-          ["MLSecOps Engineer", "Secures the model pipeline: artifact scanning, CI gates, registries, secrets, provenance, SBOM", "CI/CD, containers, supply chain, Python, cloud IAM"],
-          ["AI Detection / AI SOC Engineer", "Writes detections for prompt injection, Shadow AI and model abuse; tunes SIEM; runs purple-team loops", "SIEM query languages, log pipelines, detection-as-code, false-positive discipline"],
-          ["AI Red Teamer", "Attacks LLM apps and agents, builds harnesses, writes findings up for engineers", "Offensive mindset, scripting, reporting, prompt injection depth, agent exploitation"],
-          ["AI Governance / GRC", "AI inventory, risk registers, NIST AI RMF / ISO 42001 mapping, vendor reviews, audit evidence", "Frameworks, writing, stakeholder management, policy"],
-          ["AI Platform / Cloud AI Security", "Secures Azure OpenAI, Bedrock, Vertex, M365 Copilot; network isolation, key management, tenant config", "Cloud architecture, IAM, networking, one cloud deeply"]
-        ]},
-        { t: "p", text: "**Read that table against your own lab.** You have built ELK, Fleet and Splunk, run Kali, and written up a SOC build report. That maps almost perfectly onto the detection lane, and gives you credible stories for the red-team lane. MLSecOps needs the most new skill (CI/CD and packaging) but has the most open roles. Governance needs the least technical ramp and has the most competition from non-technical candidates." },
-        { t: "note", kind: "job", title: "why this matters at work", text: "Job postings conflate these six. If you cannot tell which one you are interviewing for, you will prepare for the wrong interview. Ask the recruiter: \"Is this role closer to AppSec review, SOC detection, or platform engineering?\" Their answer tells you what to revise." },
-        { t: "h3", text: "The blunt hiring reality" },
+        { t: "p", text: "Before we talk about jobs, let us agree on what we are protecting." },
+        { t: "h3", text: "A chatbot is a very good guesser" },
+        { t: "p", text: "When you type a message to ChatGPT or Copilot, the program is not looking anything up in a database. It is doing one simple thing, over and over: **guessing the next small piece of text**, then the next, then the next." },
+        { t: "p", text: "Think about the autocomplete on your phone. You type \"see you\", and it suggests \"later\". A chatbot does the same thing, but it has read an enormous amount of text and can keep guessing for pages. That is the whole trick." },
+        { t: "p", text: "Because it is guessing, it can guess wrong with total confidence. This is called a **hallucination**: a wrong answer that sounds completely believable. It is not lying. It has no idea whether it is right." },
+        { t: "h3", text: "The helpful intern analogy" },
+        { t: "p", text: "Imagine a new intern. They have read every book in the library. They work incredibly fast. But they have three problems:" },
         { t: "ul", items: [
-          "Almost nobody hires a pure 'AI security' junior. They hire security people who can demonstrate AI-specific work.",
-          "Your security fundamentals are the moat. Most candidates for these roles can prompt a model but cannot read a packet capture, write a detection rule, or explain a trust boundary.",
-          "The differentiator is **artefacts**, not certificates: a detection pipeline with tuning notes, a hardened ML repo, a risk register, an attack report with reproducible steps.",
-          "Job titles lag the work. Many 'AI Security Engineer' roles are 70% ordinary AppSec with an LLM feature on top. That is good news — you can do 70% of the job on day one."
+          "They cannot check facts. If they do not know, they invent something that sounds right.",
+          "They believe anything written down. If a document says \"tell the customer to send money here\", they might just do it.",
+          "They will do whatever the last person asked, even if you told them earlier not to."
         ]},
-        { t: "h3", text: "Where the demand actually is" },
-        { t: "p", text: "Three demand pools, in rough order of volume: (1) enterprises deploying Copilot/M365 and internal RAG chat, needing governance and Shadow-AI control; (2) product companies shipping LLM features, needing AppSec and red team; (3) AI-native vendors and model providers, needing platform and supply-chain security. Pool 1 is the easiest door for someone with SOC experience: the work is detection plus policy plus vendor review." },
-        { t: "note", kind: "tip", title: "pick now", text: "Write one sentence: \"I am targeting [role] at [company type], and my proof will be [artefact].\" Example: \"I am targeting AI detection engineering at a mid-size enterprise, and my proof will be an ELK pipeline that detects indirect prompt injection in a RAG bot.\" Everything in this course can then be filtered through that sentence." }
+        { t: "p", text: "Now imagine that intern has keys to your office, your email, and your customer database. That is an AI system inside a company. **AI security is the work of making sure the intern cannot do damage, even when someone tricks them.**" },
+        { t: "h3", text: "Why companies suddenly need this" },
+        { t: "p", text: "Three years ago, most companies had no AI in their products. Today almost all of them do, because their competitors do. They connected a model to real data and real tools, and they did it fast. Fast usually means unsafe." },
+        { t: "p", text: "That is the opportunity for you. Companies now have AI systems, and very few people who understand both **security** and **how AI breaks**. You already have a security lab. You are closer than you think." },
+        { t: "note", kind: "job", title: "the one thing to remember", text: "An AI model does not decide what is true, and it does not decide what is allowed. It only predicts text. Every safety decision therefore has to be made by the software around the model. Your job is to check that software." },
+        { t: "h3", text: "Words you will hear today" },
+        { t: "table", head: ["Word", "Plain meaning"], rows: [
+          ["Model", "The guessing program itself (e.g. GPT, Llama, Claude)"],
+          ["Prompt", "The text you send to the model"],
+          ["Response / completion", "The text the model sends back"],
+          ["LLM", "Large Language Model — a model that works with text"],
+          ["AI application", "The whole product: model + your data + tools + the website around it"]
+        ]},
+        { t: "p", text: "Notice the last one. Most security problems are **not** inside the model. They are in the application built around it — the part that feeds it data and obeys its answers." }
       ],
       quiz: [
-        { q: "Which role is the shortest hop from a SOC analyst background?", options: ["AI Governance", "AI Detection / AI SOC Engineer", "MLSecOps", "AI Platform Architect"], answer: 1, why: "The detection lane reuses SIEM, log pipeline and tuning skills you already have; the new part is AI-specific telemetry and attack patterns." },
-        { q: "What do AI security employers weight most heavily?", options: ["Certificates", "Years of ML research", "Demonstrable artefacts and security fundamentals", "Prompt engineering courses"], answer: 2, why: "Artefacts plus fundamentals beat certificates repeatedly. A tuned detection pipeline or a hardened model repo is evidence you can do the work." },
-        { q: "Which statement about 'AI Security Engineer' titles is most accurate?", options: ["They are all ML research roles", "Many are ordinary AppSec roles with LLM features added", "They never involve coding", "They require a PhD"], answer: 1, why: "Titles lag reality. A large share of these roles is standard secure-design and code review work applied to an application that happens to call a model." }
+        { q: "In simple terms, what does a chatbot do?", options: ["Searches the internet for the answer", "Guesses the next piece of text, again and again", "Looks answers up in a database", "Asks a human"], answer: 1, why: "It is next-word prediction. It does not look anything up, which is why it can be confidently wrong." },
+        { q: "Why can an AI give a wrong answer that sounds right?", options: ["It is lying on purpose", "It is guessing, and it cannot check whether the guess is true", "Its internet is slow", "It has a virus"], answer: 1, why: "A hallucination is a guess that sounds plausible. The model has no fact-checking step." },
+        { q: "Where do most AI security problems actually live?", options: ["Inside the model's brain", "In the application around the model: data, tools, and how answers are used", "In the internet cable", "In the user's keyboard"], answer: 1, why: "The model just produces text. The damage happens when the application trusts that text, or feeds it the wrong data." }
       ]
     },
     {
       id: "m00-l2",
-      title: "Your 13-week plan, and how to use this site",
-      minutes: 12,
-      tag: "planning",
+      title: "Six jobs called 'AI security' — pick one",
+      minutes: 15,
+      tag: "career",
       body: [
-        { t: "p", text: "The plan is deliberately output-first: every module ends in something you can show, not something you can recall. Thirteen weeks, roughly 8–10 hours a week, one module per week with two buffer weeks." },
-        { t: "table", head: ["Weeks", "Module", "Artefact you end with"], rows: [
-          ["1", "00 Orientation", "Target role sentence + 13-week calendar"],
-          ["2", "01 LLM internals", "Notes + local model running"],
-          ["3", "02 Failure modes", "Attack log: 5 reproduced issues with payloads"],
-          ["4", "03 Threat modelling", "Threat model diagram + 10-row risk table"],
-          ["5–6", "04 Detection engineering", "P1: ELK/Splunk detection pipeline + tuning writeup"],
-          ["7", "05 Guardrails", "Hardened toy bot, before/after attack results"],
-          ["8–9", "06 MLSecOps", "P2: CI repo with model scanning gate"],
-          ["10", "07 Cloud AI", "Audit checklist applied to a trial tenant"],
-          ["11", "08 Adversarial ML", "Short lab note on membership inference"],
-          ["12", "09 Agentic + MCP", "Agent attack chain writeup"],
-          ["13", "10 Governance", "P3: AI inventory + risk register + RMF mapping"],
-          ["buffer", "11 Career", "P4: Shadow AI report, resume, 2 mock interviews"]
+        { t: "p", text: "If you search for \"AI security jobs\", you will see six different jobs hiding behind that one phrase. They pay differently, and they ask different interview questions. Pick one main target now. You can change it later." },
+        { t: "table", head: ["Job", "What you actually do", "Would suit you if…"], rows: [
+          ["AI Security Engineer", "Read designs and code for AI products, find weaknesses, tell engineers how to fix them", "You like application security and explaining things to developers"],
+          ["MLSecOps Engineer", "Protect the pipeline that builds and stores models: scanning files, CI/CD, permissions", "You like servers, pipelines, automation, and building gates"],
+          ["AI Detection / SOC Engineer", "Watch the logs, write alerts for attacks, tune them so analysts are not drowned", "You already like SIEM, logs, Splunk or Elastic — this is you"],
+          ["AI Red Teamer", "Attack AI systems on purpose, then write a clear report", "You enjoy Kali, CTFs, and breaking things to prove a point"],
+          ["AI Governance / GRC", "Write policy, keep an inventory of AI systems, assess risk, talk to auditors", "You write well and like process, law and structure"],
+          ["Cloud AI Platform Security", "Secure Azure OpenAI, AWS Bedrock, Google Vertex, Microsoft 365 Copilot", "You like cloud, identity and network configuration"]
         ]},
-        { t: "h3", text: "The weekly rhythm" },
-        { t: "ol", items: [
-          "**Read** the module's lessons in one sitting (60–90 min). Do not take notes yet.",
-          "**Do** the lab the same week. Labs are where the interview stories come from.",
-          "**Write** 200 words in your own repo: what you did, what broke, what you would tell an engineer. Commit it.",
-          "**Quiz** at the end of each lesson. Anything you miss, re-read that section before the next module.",
-          "**Push** the week's work to GitHub. The commit history is a public record of consistent effort."
-        ]},
-        { t: "note", kind: "warn", title: "the trap", text: "Watching AI-security content feels like progress and is not. If a week goes by with no artefact, you have not learned the week. The labs are the course; the reading exists to make the labs legible." },
-        { t: "h3", text: "How to use the site" },
+        { t: "h3", text: "Which one is your fastest door?" },
+        { t: "p", text: "You have built an ELK stack, Fleet, Splunk and a Kali lab, and you wrote a SOC build report. That is almost exactly the day-to-day of an **AI Detection Engineer**. The only new part is learning what AI attacks look like in logs." },
+        { t: "p", text: "Second best for you is **AI Red Teamer**, because you already have the attacker mindset and tools. Third is **MLSecOps**, which needs the most new learning (pipelines and packaging) but has the most open jobs." },
+        { t: "note", kind: "job", title: "why choosing matters", text: "All six share the same basics, so nothing is wasted. But the interviews differ. A detection interview asks 'what would you log and alert on?'. A governance interview asks 'how would you classify this system under the EU AI Act?'. You cannot prepare for both at once in three months." },
+        { t: "h3", text: "Write your sentence" },
+        { t: "p", text: "Fill this in and keep it somewhere you will see it:" },
+        { t: "code", lang: "text", text: `I am targeting [JOB] at [TYPE OF COMPANY],
+and my proof will be [ONE THING I BUILD].
+
+Example:
+I am targeting AI Detection Engineering at a mid-size company,
+and my proof will be a working detection pipeline for prompt injection.` },
+        { t: "h3", text: "The uncomfortable truth about hiring" },
         { t: "ul", items: [
-          "Press `/` to search across every lesson — use it when an interview question stumps you.",
-          "Progress is stored in your browser (localStorage). It is per-browser, not per-account. Exporting is not needed; the real record is your repo.",
-          "Every lesson ends with three questions. Answering all of them marks the lesson complete and saves your score.",
-          "Modules 00–04 are complete now. 05–11 open one per week — each currently has a map lesson so you can see what is coming."
+          "Almost nobody hires a junior with the title 'AI Security'. They hire security people who can show AI work.",
+          "Your security basics are your advantage. Most applicants can use ChatGPT but cannot read a log or explain a network boundary.",
+          "A finished project beats five certificates. Every time.",
+          "Job titles are messy. Many 'AI Security Engineer' jobs are normal security jobs with an AI feature attached. You can already do most of that work."
         ]},
-        { t: "h3", text: "The 20% that carries 80% of interviews" },
-        { t: "p", text: "If you only had ten hours before an interview, spend them here: the lethal trifecta (module 02), indirect prompt injection via retrieved documents (02), why output filtering is not a fix (02/05), the difference between RAG and fine-tuning and why it matters for data exposure (01), how you would detect an injection attempt from logs (04), and the NIST AI RMF's four functions: govern, map, measure, manage (10)." }
+        { t: "note", kind: "tip", title: "do this in the next ten minutes", text: "Write the sentence above in a note. Then write down three companies that ship an AI product you have actually used. That is your target list. Do not research salaries yet — that comes in the next lesson." }
       ],
       quiz: [
-        { q: "What is the primary output of each module?", options: ["Flashcards", "A written artefact or lab result", "A certificate", "A reading summary"], answer: 1, why: "Output-first: each module ends in something demonstrable, because artefacts are what get you interviews." },
-        { q: "A week passes and you read two modules but built nothing. What is the correct read?", options: ["Ahead of schedule", "Neutral — reading counts", "Behind: no artefact means the week did not land", "Time to change roles"], answer: 2, why: "Reading without a lab produces recall, not capability. The plan treats artefact-free weeks as missed weeks." },
-        { q: "Where is your real learning record kept?", options: ["Browser localStorage", "The GitHub commit history and lab writeups", "The quiz score", "This site's database"], answer: 1, why: "Progress in the browser is only a convenience. The durable, shareable, interview-usable record is your repo history and writeups." }
+        { q: "Which job is the shortest step from a SOC analyst background?", options: ["AI Governance", "AI Detection / SOC Engineer", "Cloud AI Platform Security", "MLSecOps"], answer: 1, why: "It uses the same skills: logs, SIEM queries, alert tuning. Only the attack patterns are new." },
+        { q: "What do employers care about most when hiring for these roles?", options: ["Certificates", "Proof that you have built or broken something real", "Your university grade", "How many AI tools you have used"], answer: 1, why: "A working project with real results is evidence. Certificates are only a filter for HR." },
+        { q: "Why pick one job now?", options: ["Because the others are bad", "Because the interviews ask different questions and you have limited time", "Because salaries are equal", "You cannot change later"], answer: 1, why: "The basics are shared, but interview preparation diverges. Focus gives you a better chance in three months." }
       ]
     },
     {
       id: "m00-l3",
-      title: "Certificates, pay bands, and honest expectations",
-      minutes: 11,
-      tag: "career",
+      title: "Your 13-week plan, and how to use this site",
+      minutes: 13,
+      tag: "planning",
       body: [
-        { t: "p", text: "There is no certificate that proves AI security competence yet. That is both a problem and an opening: the field still rewards demonstrated work over paper. Here is the honest landscape as of 2026." },
-        { t: "table", head: ["Credential", "Cost (rough)", "Worth it if…"], rows: [
-          ["(ISC)² CC", "low", "You already have it — it clears HR filters for entry-level security"],
-          ["CISSP / CCSP", "high", "You are going for governance, architecture or enterprise roles; it is a filter, not a skill"],
-          ["IAPP AIGP", "medium", "You are targeting AI governance — the most recognised AI-specific credential right now"],
-          ["ISO/IEC 42001 Lead Auditor", "medium–high", "You want to run or audit AI management systems; strong for GRC consulting"],
-          ["Azure AI-102 / SC-100", "medium", "Your target employer is Microsoft-heavy (very common with M365 Copilot)"],
-          ["AWS Certified AI Practitioner", "low–medium", "Foundational cloud-AI vocabulary; cheap credibility for MLSecOps roles"],
-          ["SANS AI/ML security courses", "very high", "An employer is paying. Rarely worth self-funding early"]
+        { t: "p", text: "Here is the plan. One module per week, about 8 to 10 hours. Every week ends with something you can **show**, not just something you read." },
+        { t: "table", head: ["Weeks", "Module", "What you finish with"], rows: [
+          ["1", "00 Start here", "Your target sentence and a calendar with two study blocks"],
+          ["2", "01 How AI works", "A model running on your own laptop"],
+          ["3", "02 How AI fails", "Five attacks you reproduced and wrote down"],
+          ["4", "03 Threat modelling", "A one-page risk table for an AI app"],
+          ["5–6", "04 Detecting AI attacks", "A working detection pipeline with real numbers"],
+          ["7", "05 Defences", "The same app, hardened, with before/after results"],
+          ["8–9", "06 Securing the model supply chain", "A project that blocks unsafe model files"],
+          ["10", "07 Cloud AI", "A checklist applied to a real cloud tenant"],
+          ["11", "08 Classic ML attacks", "A short experiment writeup"],
+          ["12", "09 AI agents", "An attack chain writeup"],
+          ["13", "10 Governance", "An AI inventory and risk register"],
+          ["buffer", "11 Career", "Resume, two mock interviews, final report"]
         ]},
-        { t: "note", kind: "warn", title: "certificate trap", text: "Do not spend the first three months collecting AI certificates. No hiring manager has ever been persuaded by an AI certificate alone. One finished detection pipeline outweighs four badges." },
-        { t: "h3", text: "Pay, with heavy caveats" },
-        { t: "p", text: "Ranges below are broad 2026 figures for full-time roles, USD, total compensation, and they swing wildly by city, company size and remote policy. Treat them as orientation, not negotiation data. Get local numbers from Levels.fyi, Glassdoor and your own network before quoting anything." },
-        { t: "table", head: ["Role", "US (mid → senior)", "UK", "India"], rows: [
-          ["AI Detection / SOC Engineer", "110–160k → 150–200k", "£55–80k", "₹15–30 LPA"],
-          ["AI Security Engineer", "130–190k → 180–260k", "£65–100k", "₹20–45 LPA"],
-          ["MLSecOps Engineer", "140–200k → 190–270k", "£70–105k", "₹22–48 LPA"],
-          ["AI Red Teamer", "150–220k → 200–300k", "£75–120k", "₹25–55 LPA"],
-          ["AI Governance / GRC", "110–170k → 150–220k", "£60–95k", "₹18–40 LPA"]
-        ]},
-        { t: "p", text: "The premium comes from scarcity, and scarcity is uneven: pure research-facing AI security pays most but hires few; enterprise AI governance and detection hire constantly at solid-but-not-extraordinary rates." },
-        { t: "h3", text: "What realistic progress looks like" },
-        { t: "ul", items: [
-          "**Weeks 1–4:** you can explain LLM failure modes and threat-model a simple app. You are not yet employable in the lane.",
-          "**Weeks 5–9:** you have one artefact that survives scrutiny — a detection pipeline, a hardened repo. Now you can start applying to detection/MLSecOps roles.",
-          "**Weeks 10–13:** three artefacts, a written report, and rehearsed answers. This is the realistic point where interview conversion begins.",
-          "**Months 4–6:** expect 30–80 applications for a first AI-security role, and a lateral move inside your current employer is statistically the fastest route."
-        ]},
-        { t: "note", kind: "job", title: "the internal move", text: "The highest-probability path is not a cold application. It is: find the team at your current employer shipping an LLM feature or rolling out Copilot, offer a free threat model or a detection rule, and convert that into a role. You already have context and trust; external candidates have neither." },
-        { t: "h3", text: "Set your baseline this week" },
+        { t: "h3", text: "What is a 'lab' and what is an 'artefact'?" },
+        { t: "p", text: "A **lab** is a hands-on exercise where you actually run something on your computer. An **artefact** is the thing you have left afterwards: a log file, a script, a report, a diagram. Employers cannot see what is in your head, so the artefact is your proof." },
+        { t: "note", kind: "warn", title: "the trap that catches everyone", text: "Watching videos and reading lessons feels like learning. It is not. If a week passes and you built nothing, you did not learn that week. The reading exists to help you do the lab, nothing more." },
+        { t: "h3", text: "The weekly rhythm" },
         { t: "ol", items: [
-          "Write the target sentence from lesson 1 and put it somewhere visible.",
-          "Pick three companies you would actually work for in that lane and note one AI product each ships.",
-          "Block two 90-minute sessions per week in your calendar. Name them 'lab'.",
-          "Create the GitHub repo you will push to (or use the one this site lives in).",
-          "Bookmark your module 04 lab; it is the one that produces the strongest interview story."
-        ]}
+          "**Read** the whole module in one sitting. About 60 to 90 minutes. Do not take notes yet.",
+          "**Do** the lab in the same week. This is the part that counts.",
+          "**Write** 200 words: what you did, what went wrong, what surprised you. Save it in the repo.",
+          "**Answer** the three questions at the end of each lesson. If you miss one, re-read that part.",
+          "**Push** your work to GitHub. The commit history proves you kept going."
+        ]},
+        { t: "h3", text: "How to use this website" },
+        { t: "ul", items: [
+          "Press the **/** key to search every lesson. Useful when an interview question stumps you.",
+          "Your progress is saved in this browser only. It is a convenience, not a record — your GitHub repo is the real record.",
+          "Each lesson ends with three questions. Answer all three to mark it complete.",
+          "Modules 00 to 04 are fully written. 05 to 11 have a plan lesson for now."
+        ]},
+        { t: "h3", text: "If you only have ten hours before an interview" },
+        { t: "p", text: "Spend them on these five ideas: why prompt injection cannot be fixed by filtering (Module 02), what indirect injection is (02), the 'lethal trifecta' (02), the difference between RAG and fine-tuning (01), and how you would detect an attack in logs (04). Those five come up again and again." }
       ],
       quiz: [
-        { q: "Which credential is most directly relevant to an AI governance target?", options: ["OSCP", "IAPP AIGP", "CCNA", "Azure AI-102"], answer: 1, why: "AIGP is the recognised AI-governance credential; AI-102 is an Azure AI engineering cert, useful but not governance-focused." },
-        { q: "When should you start applying for AI security roles?", options: ["Immediately, before any artefact", "After at least one artefact survives technical scrutiny", "Only after CISSP", "After two years of ML study"], answer: 1, why: "One credible artefact plus fundamentals is the practical threshold; without it, applications convert poorly." },
-        { q: "Statistically, what is the fastest route into the field?", options: ["Cold applications at scale", "A lateral move inside your current employer", "A master's degree", "Bug bounty fame"], answer: 1, why: "Internal moves leverage existing trust and context, and the team already knows your work. Cold applications have far lower conversion." }
+        { q: "What should you have at the end of every week?", options: ["A certificate", "Something you built or wrote that you can show", "A new tool installed", "A longer reading list"], answer: 1, why: "The plan is output-first. Artefacts are what get you interviews." },
+        { q: "You read two modules but built nothing. What does that mean?", options: ["You are ahead", "You are behind: reading alone does not create skill", "It is fine as long as you took notes", "You should switch jobs"], answer: 1, why: "Without a lab, you have recognition, not capability. The plan treats that as a missed week." },
+        { q: "Where is your real learning record kept?", options: ["The browser progress bar", "Your GitHub commits and writeups", "The quiz scores", "This website's server"], answer: 1, why: "Browser progress is per-device and temporary. Your repo is durable and shareable." }
+      ]
+    },
+    {
+      id: "m00-l4",
+      title: "Money, certificates, and what is realistic",
+      minutes: 12,
+      tag: "career",
+      body: [
+        { t: "p", text: "Two questions everyone asks first: what does it pay, and what certificate do I need? Here are honest answers." },
+        { t: "h3", text: "Certificates: what they actually do" },
+        { t: "p", text: "A certificate is a badge that proves you passed an exam. It helps a recruiter's computer find you. It does **not** prove you can do the job, and no manager has ever hired someone because of an AI certificate alone." },
+        { t: "table", head: ["Certificate", "What it is for", "Worth it for you?"], rows: [
+          ["(ISC)² CC", "Entry-level security badge for HR filters", "You already have it — leave it on the CV"],
+          ["IAPP AIGP", "AI governance and policy", "Yes, only if you choose the governance job"],
+          ["ISO/IEC 42001 Lead Auditor", "Auditing AI management systems", "Later, if you go into consulting or audit"],
+          ["Azure AI-102 / SC-100", "Microsoft AI and cloud security", "Useful if your target company is Microsoft-heavy"],
+          ["AWS AI Practitioner", "Basic cloud AI vocabulary", "Cheap and quick if you use AWS"],
+          ["CISSP / CCSP", "Senior security management", "Later in your career, not now"]
+        ]},
+        { t: "note", kind: "warn", title: "do not start here", text: "Do not spend your first three months collecting certificates. One finished detection project beats four badges. Study first, certify later, ideally with an employer paying." },
+        { t: "h3", text: "What it pays (rough numbers)" },
+        { t: "p", text: "These are broad 2026 ranges for full-time jobs. They change a lot by city and company. Treat them as direction, not a promise." },
+        { t: "table", head: ["Job", "USA (mid level)", "UK", "India (LPA = lakh per year)"], rows: [
+          ["AI Detection / SOC", "$110k–$160k", "£55k–£80k", "₹15–30 LPA"],
+          ["AI Security Engineer", "$130k–$190k", "£65k–£100k", "₹20–45 LPA"],
+          ["MLSecOps Engineer", "$140k–$200k", "£70k–£105k", "₹22–48 LPA"],
+          ["AI Red Teamer", "$150k–$220k", "£75k–£120k", "₹25–55 LPA"],
+          ["AI Governance / GRC", "$110k–$170k", "£60k–£95k", "₹18–40 LPA"]
+        ]},
+        { t: "p", text: "One lakh is 100,000 rupees. So ₹20 LPA means 20 lakh rupees per year, which is 2,000,000 rupees." },
+        { t: "h3", text: "What progress really looks like" },
+        { t: "ul", items: [
+          "**Weeks 1–4:** you can explain the basics and draw a simple risk diagram. Not yet hireable in this field.",
+          "**Weeks 5–9:** you have one project that survives questions. Now start applying for detection and MLSecOps roles.",
+          "**Weeks 10–13:** three projects, one written report, rehearsed answers. This is where interviews start converting.",
+          "**Months 4–6:** expect 30 to 80 applications for a first role. That is normal, not failure."
+        ]},
+        { t: "note", kind: "job", title: "the shortcut most people miss", text: "The fastest way in is often inside your current employer. Find the team shipping an AI feature or rolling out Copilot. Offer a free risk review or a detection rule. You already have trust and context there; outside candidates have neither." }
+      ],
+      quiz: [
+        { q: "What does a certificate mainly do for you?", options: ["Proves you can do the job", "Helps you pass HR filters and recruiter searches", "Replaces a project", "Guarantees an interview"], answer: 1, why: "Certificates are filters, not proof of skill. Projects are the proof." },
+        { q: "₹20 LPA means roughly how much per year?", options: ["20,000 rupees", "200,000 rupees", "2,000,000 rupees", "20,000,000 rupees"], answer: 2, why: "One lakh is 100,000. Twenty lakh is 2,000,000 rupees per year." },
+        { q: "What is statistically the fastest route into an AI security role?", options: ["Cold applications everywhere", "A move inside your current employer", "A master's degree", "Winning a bug bounty"], answer: 1, why: "Internal moves use existing trust and context, and convert far more often than cold applications." }
       ]
     }
   ]

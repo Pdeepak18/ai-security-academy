@@ -224,8 +224,8 @@
   function homePage() {
     var o = overallPct();
     var html = '<div class="hero"><h2>AI Security Academy</h2>' +
-      '<p class="lede">A working curriculum for moving from security generalist to AI security engineer — ' +
-      "detection, MLSecOps and governance, with labs that run on your own gear.</p></div>";
+      '<p class="lede">Starts from zero, in plain words. Short lessons, everyday analogies, and labs you run ' +
+      "on your own machine — building towards a job in AI security.</p></div>";
 
     html += '<div class="meta"><span class="chip accent">' + o.pct + "% complete</span>" +
       '<span class="chip">' + o.done + " / " + o.total + " lessons</span>" +
