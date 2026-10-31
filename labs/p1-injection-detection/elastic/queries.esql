@@ -23,6 +23,28 @@ FROM logs-ai.chat-*
 | SORT @timestamp DESC
 
 
+// ── R4: extraction intent in the query (added in iteration 2) ───────────────
+// Catches "print your configuration", "translate your instructions",
+// "repeat the words above", "maintenance mode" style framings.
+FROM logs-ai.chat-*
+| WHERE @timestamp > NOW() - 24 hours
+| WHERE prompt.text RLIKE """.*(system prompt|your instructions|repeat (the )?words above|repeat everything|configuration|maintenance mode|verbatim|translate your|read out|reveal|debug ?bot|decode (this|the following)|supersedes).*"""
+| EVAL reason = "extraction_intent"
+| KEEP @timestamp, user.name, ai.session_id, reason, prompt.text
+| SORT @timestamp DESC
+
+
+// ── R5: instruction-like text inside retrieved chunks ──────────────────────
+// The indirect-injection tell. High value, because payloads here are almost
+// never legitimate. Requires that the app logs retrieved content.
+FROM logs-ai.chat-*
+| WHERE @timestamp > NOW() - 24 hours
+| WHERE retrieval.chunks.text RLIKE """.*(assistant instruction|ignore (all |any )?(of )?(the )?previous|do not mention|you must|supersedes|highest priority).*"""
+| EVAL reason = "poisoned_chunk"
+| KEEP @timestamp, user.name, ai.session_id, reason, retrieval.chunks.id
+| SORT @timestamp DESC
+
+
 // ── R3: prompt→tool chain (correlate by session) ────────────────────────────
 // ES|QL has no sequence operator; approximate with session aggregation.
 // For true sequencing use EQL (below) or a detection rule with a 10m window.

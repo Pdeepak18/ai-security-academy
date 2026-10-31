@@ -50,6 +50,8 @@ app = Flask(__name__)
 def load_chunks():
     chunks = []
     for p in sorted(DOCS.glob("*.md")):
+        if ".example" in p.name:
+            continue  # poison.example.md only loads once you copy it to poison.md
         text = p.read_text(encoding="utf-8", errors="ignore")
         for i, para in enumerate(re.split(r"\n\s*\n", text)):
             para = para.strip()

@@ -89,6 +89,23 @@ their days on.
 Target for a second iteration: recall > 0.85 with precision > 0.90. Do not
 chase recall by lowering thresholds to zero — that is how rules get disabled.
 
+## Reference results (this repo's run-1 / run-2)
+
+29 events: 12 benign, 17 attack, `llama3.2:3b`, temperature 0.
+
+| Iteration | Rules | TP | FP | FN | Precision | Recall |
+|---|---|---|---|---|---|---|
+| run-1 | R1 canary, R2 delimiter, R3 sequence | 5 | 0 | 12 | 1.00 | 0.29 |
+| run-2 | + R4 extraction intent, R5 poisoned chunk | 12 | 0 | 5 | 1.00 | 0.71 |
+
+Raw output is in `results/run-1.txt` and `results/run-2.txt`. R3 produced zero
+true positives because the model refused to emit the `FETCH(...)` call — record
+that honestly rather than claiming coverage.
+
+The five remaining false negatives are the interesting part: paraphrased
+extraction ("forget what you were told earlier…"), indirect phrasing, and the
+tool-call path. That list is the next iteration's backlog.
+
 ## Grading rubric (be honest with yourself)
 
 | Level | Looks like |

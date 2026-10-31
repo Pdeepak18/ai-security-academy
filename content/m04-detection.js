@@ -244,13 +244,13 @@ AuditLogs
           "**Write the tuning note** (500 words): what fired, what was noisy, what you suppressed and why, and what you would do with another week."
         ]},
         { t: "h3", text: "The evaluation table you must produce" },
-        { t: "table", head: ["Rule", "TP", "FP", "FN", "Precision", "Recall"], rows: [
-          ["Canary in output", "12", "0", "1", "1.00", "0.92"],
-          ["Delimiter spoof", "9", "3", "4", "0.75", "0.69"],
-          ["Prompt→tool sequence", "6", "2", "7", "0.75", "0.46"],
-          ["Combined score ≥ 6", "15", "1", "4", "0.94", "0.79"]
+        { t: "p", text: "Real numbers from the reference run (29 events: 12 benign, 17 attack, llama3.2:3b at temperature 0). Yours will differ — different model, different payloads — which is exactly why you measure." },
+        { t: "table", head: ["Iteration", "TP", "FP", "FN", "Precision", "Recall"], rows: [
+          ["run-1: R1+R2+R3 combined", "5", "0", "12", "1.00", "0.29"],
+          ["run-2: + extraction-intent (R4) + poisoned-chunk (R5)", "12", "0", "5", "1.00", "0.71"]
         ]},
-        { t: "p", text: "Those numbers are illustrative, not targets — the point is that you **have** numbers. Interviewers ask 'how do you know it works?' and most candidates cannot answer. You will." },
+        { t: "p", text: "Read that honestly: 0.71 recall is **not** production-grade. It caught the canary leaks, the delimiter spoof and most extraction attempts, and missed subtle paraphrases. That is the real state of prompt-injection detection in 2026 — and saying so out loud is more credible than claiming a rule catches everything." },
+        { t: "p", text: "Notice too that R3 (prompt→tool sequence) scored zero true positives: the model refused to emit the `FETCH(...)` call. A rule with no positive test cases is a rule you cannot claim works. Either engineer a test that triggers it, or mark it unvalidated in your writeup." },
         { t: "h3", text: "Then do the purple-team loop" },
         { t: "ul", items: [
           "Take the three payloads that your rules missed (the false negatives).",

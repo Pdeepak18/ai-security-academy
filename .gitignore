@@ -1,7 +1,6 @@
 # --- lab noise ---
 labs/toy-target/logs/*.jsonl
 labs/toy-target/docs/poison.md
-labs/*/results/*.txt
 labs/**/.venv/
 **/__pycache__/
 *.pyc
