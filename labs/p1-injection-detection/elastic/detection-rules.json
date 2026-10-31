@@ -1,0 +1,50 @@
+[
+  {
+    "name": "AI — canary token leaked in model output or URL",
+    "rule_id": "ai-canary-leak-001",
+    "rule_type_id": "query",
+    "consumer": "siem",
+    "enabled": true,
+    "description": "A per-deployment canary string appeared in a completion or an outbound URL. Indicates system prompt disclosure or exfiltration.",
+    "tags": ["AI", "LLM01", "LLM07", "ATLAS AML.T0051", "ATLAS AML.T0057"],
+    "schedule": { "interval": "5m" },
+    "params": {
+      "language": "esql",
+      "query": "FROM logs-ai.chat-* | WHERE response.text LIKE \"*CANARY-7f3a91c2*\" OR url.full LIKE \"*CANARY-7f3a91c2*\"",
+      "timeField": "@timestamp"
+    },
+    "actions": []
+  },
+  {
+    "name": "AI — chat template delimiter spoofing in prompt or retrieved chunk",
+    "rule_id": "ai-delimiter-spoof-002",
+    "rule_type_id": "query",
+    "consumer": "siem",
+    "enabled": true,
+    "description": "Chat-template markers (<system>, <|im_start|>, ### SYSTEM, [INST]) present in user input or retrieved documents. Rare in legitimate traffic.",
+    "tags": ["AI", "LLM01", "ATLAS AML.T0051"],
+    "schedule": { "interval": "5m" },
+    "params": {
+      "language": "esql",
+      "query": "FROM logs-ai.chat-* | WHERE prompt.text RLIKE \"\"\".*(</?system>|###\\\\s*(SYSTEM|USER|ASSISTANT)\\\\b|\\\\[INST\\\\]).*\"\"\" OR retrieval.chunks.text RLIKE \"\"\".*(</?system>|###\\\\s*(SYSTEM|USER|ASSISTANT)\\\\b|\\\\[INST\\\\]).*\"\"\"",
+      "timeField": "@timestamp"
+    },
+    "actions": []
+  },
+  {
+    "name": "AI — suspicious prompt followed by privileged tool call",
+    "rule_id": "ai-prompt-tool-chain-003",
+    "rule_type_id": "eql",
+    "consumer": "siem",
+    "enabled": true,
+    "description": "Sequence: instruction-override language in a prompt or retrieved chunk, followed within 10 minutes by a privileged tool call in the same session.",
+    "tags": ["AI", "LLM01", "LLM06", "ATLAS AML.T0051"],
+    "schedule": { "interval": "5m" },
+    "params": {
+      "language": "eql",
+      "query": "sequence by ai.session_id with maxspan=10m [ any where event.action == \"chat.completion\" and (prompt.text : (\"*ignore previous*\", \"*disregard*\", \"*new instructions*\", \"*repeat everything*\") or retrieval.chunks.text : (\"*ignore previous*\", \"*you must*\", \"*do not tell the user*\")) ] [ any where event.action in (\"tool.call\", \"tool.result\") and ai.tool.name in (\"fetch_url\", \"send_email\", \"http_request\", \"write_file\", \"run_sql\") ]",
+      "timeField": "@timestamp"
+    },
+    "actions": []
+  }
+]

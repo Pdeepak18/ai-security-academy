@@ -1,0 +1,7 @@
+risk_id,asset_id,description,category,likelihood,impact,score,inherent_risk,control,residual_risk,owner,review_date
+R-001,AI-001,Poisoned document in shared knowledge base steers answers (indirect injection),LLM01,5,4,20,high,Index writes restricted to reviewed sources; retrieved text delimited and treated as data; alert on instruction-like chunks,medium,Platform Eng,2026-12-01
+R-002,AI-001,Cross-tenant retrieval returns another customer's chunks,LLM08,3,5,15,high,Tenant filter enforced in query layer; per-tenant collections; 20-case retrieval regression suite in CI,low,Data Platform,2026-12-01
+R-003,AI-001,Markdown image exfiltrates conversation content,LLM05,4,3,12,medium,CSP img-src self; remote images proxied; HTML stripped in renderer,low,Frontend,2026-11-15
+R-004,AI-002,Oversharing: Copilot surfaces files users should not see,Governance,5,5,25,critical,SharePoint permission remediation; sensitivity labels; DLP; restricted pilot,high,IT + InfoSec,2026-11-30
+R-005,AI-005,Automated CV scoring produces discriminatory outcomes,Legal/EU AI Act,4,5,20,high,Vendor DPIA; human-in-the-loop for rejections; bias testing; documented lawful basis,high,HR Director,2026-11-01
+R-006,AI-003,Contract data retained by provider for model training,Supplier,3,4,12,medium,Contractual no-training clause; zero-retention config verified; annual attestation,low,Legal Ops,2027-01-15

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Acme SupportBot (lab)</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; font-family: "Segoe UI", system-ui, sans-serif; background:#0d1117; color:#d7dee9; }
+  .warn { background:#3a1d24; color:#f7768e; padding:8px 14px; font-size:12px; letter-spacing:.4px; }
+  header { padding:14px 18px; border-bottom:1px solid #232c3a; font-weight:600; }
+  #log { padding:18px; max-width:760px; }
+  .msg { margin-bottom:16px; padding:12px 14px; border-radius:10px; max-width:90%; font-size:14px; line-height:1.55; }
+  .user { background:#1b2a3a; margin-left:auto; }
+  .bot { background:#141a23; border:1px solid #232c3a; }
+  .bot img { max-width:100%; }
+  .role { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#67758a; margin-bottom:4px; }
+  form { position:fixed; bottom:0; left:0; right:0; display:flex; gap:8px; padding:12px; background:#141a23; border-top:1px solid #232c3a; }
+  input { flex:1; padding:10px; border-radius:8px; border:1px solid #232c3a; background:#0a0e14; color:#d7dee9; font-size:14px; }
+  button { padding:10px 18px; border-radius:8px; border:1px solid #2f7d6d; background:#14262a; color:#4ec9b0; font-size:14px; cursor:pointer; }
+  .meta { font-size:11px; color:#67758a; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="warn">DELIBERATELY VULNERABLE LAB — localhost only. Renders model output as HTML on purpose.</div>
+<header>Acme Widgets · SupportBot</header>
+<div id="log"></div>
+<form id="f">
+  <input id="q" placeholder="Ask about pricing, shipping, returns…" autocomplete="off">
+  <button>Send</button>
+</form>
+<script>
+const log = document.getElementById("log");
+const f = document.getElementById("f");
+const q = document.getElementById("q");
+
+// Intentionally unsafe: markdown-ish renderer that allows remote images.
+function render(text) {
+  return text
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img alt="$1" src="$2">')
+    .replace(/\n/g, "<br>");
+}
+
+function add(role, html, meta) {
+  const d = document.createElement("div");
+  d.className = "msg " + role;
+  d.innerHTML = '<div class="role">' + role + "</div>" + html +
+                (meta ? '<div class="meta">' + meta + "</div>" : "");
+  log.appendChild(d);
+  d.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+f.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = q.value.trim();
+  if (!msg) return;
+  q.value = "";
+  add("user", render(msg));
+  add("bot", "<i>thinking…</i>");
+  const last = log.lastElementChild;
+  try {
+    const r = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "ui-user", message: msg }),
+    });
+    const j = await r.json();
+    last.innerHTML = '<div class="role">bot</div>' + render(j.answer || JSON.stringify(j));
+    const docs = (j.retrieved || []).map(c => c.id).join(", ");
+    last.innerHTML += '<div class="meta">retrieved: ' + (docs || "none") +
+      (j.tool ? " · tool: " + j.tool.tool + " → " + j.tool.url : "") + "</div>";
+  } catch (err) {
+    last.innerHTML = '<div class="role">bot</div><span style="color:#f7768e">' + err + "</span>";
+  }
+});
+</script>
+</body>
+</html>

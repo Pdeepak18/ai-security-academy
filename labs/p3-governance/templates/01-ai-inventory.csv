@@ -1,0 +1,6 @@
+asset_id,system_name,business_owner,technical_owner,purpose,model_provider,hosting,data_classes,user_count,external_facing,risk_tier,last_review
+AI-001,Support Assistant,Head of CX,Platform Eng,Answer customer questions,RAG over internal docs,Self-hosted (Ollama),Public + internal KB,1200,yes,high,2026-10-01
+AI-002,M365 Copilot,COO,IT,Productivity assistant,OpenAI via Microsoft,SaaS,All M365 content,900,no,high,2026-09-15
+AI-003,Contract summariser,Legal,Legal Ops,Summarise supplier contracts,Azure OpenAI,SaaS (private endpoint),Confidential contracts,25,no,high,2026-08-20
+AI-004,Marketing copy helper,CMO,Marketing,Generate campaign copy,Public API,SaaS,Public marketing,40,no,medium,2026-07-11
+AI-005,Recruitment CV screener,HR Director,HR Systems,Vendor SaaS scoring,SaaS vendor,SaaS,Candidate PII (special category),0 (pilot),no,high,2026-10-05

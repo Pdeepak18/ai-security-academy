@@ -1,0 +1,42 @@
+// P1 detection logic — ES|QL.
+// Field names follow the toy-target schema; adjust to yours.
+
+// ── R1: canary leaked into output or an outbound URL ────────────────────────
+// Highest precision rule in the pack. Near-zero false positives by design.
+FROM logs-ai.chat-*
+| WHERE @timestamp > NOW() - 24 hours
+| WHERE response.text LIKE "*CANARY-7f3a91c2*"
+     OR url.full LIKE "*CANARY-7f3a91c2*"
+| EVAL severity = CASE(url.full LIKE "*CANARY-7f3a91c2*", "critical", "high")
+| KEEP @timestamp, user.name, ai.session_id, ai.app, severity, url.domain, url.full
+| SORT @timestamp DESC
+
+
+// ── R2: delimiter / role spoofing in the prompt or retrieved chunks ─────────
+// Low volume because chat-template markers are rare in genuine user text.
+FROM logs-ai.chat-*
+| WHERE @timestamp > NOW() - 24 hours
+| WHERE prompt.text RLIKE """.*(</?system>|<\\|im_start\\|>|###\\s*(SYSTEM|USER|ASSISTANT)\\b|\\[INST\\]).*"""
+     OR retrieval.chunks.text RLIKE """.*(</?system>|###\\s*(SYSTEM|USER|ASSISTANT)\\b|\\[INST\\]).*"""
+| EVAL reason = "delimiter_spoof"
+| KEEP @timestamp, user.name, ai.session_id, ai.app, reason, prompt.text
+| SORT @timestamp DESC
+
+
+// ── R3: prompt→tool chain (correlate by session) ────────────────────────────
+// ES|QL has no sequence operator; approximate with session aggregation.
+// For true sequencing use EQL (below) or a detection rule with a 10m window.
+FROM logs-ai.chat-*
+| WHERE @timestamp > NOW() - 24 hours
+| EVAL suspicious = CASE(
+    prompt.text RLIKE """.*(ignore|disregard|forget)\\b.{0,40}\\b(previous|above|earlier|instructions).*""", true,
+    prompt.text RLIKE """.*(new instructions|repeat everything|verbatim|unrestricted).*""", true,
+    false)
+| STATS events = COUNT(*),
+        suspicious_events = COUNT(suspicious),
+        tools = COUNT(ai.tool_calls) WHERE suspicious,
+        first = MIN(@timestamp),
+        last = MAX(@timestamp)
+  BY ai.session_id, user.name
+| WHERE suspicious_events > 0 AND tools > 0
+| KEEP first, last, ai.session_id, user.name, events, suspicious_events, tools

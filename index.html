@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Security Academy</title>
+<meta name="description" content="A hands-on curriculum for AI security engineering: detection, MLSecOps, governance and offensive testing.">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>AI Security <span>Academy</span></h1>
+      <p>detection · MLSecOps · governance</p>
+    </div>
+
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Search lessons  ( / )" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="pctText">0%</span>
+        <span id="pctCount">0/0 lessons</span>
+      </div>
+      <div class="progress-bar"><div id="pctFill"></div></div>
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button id="menuBtn" type="button">☰ Modules</button>
+      <a href="#/" style="font-size:13px;color:var(--text-dim)">Index</a>
+    </div>
+    <main class="article" id="article"></main>
+  </div>
+
+</div>
+
+<!-- content modules: plain JS so the site works from file:// with no server -->
+<script src="content/_registry.js"></script>
+<script src="content/m00-orientation.js"></script>
+<script src="content/m01-llm-internals.js"></script>
+<script src="content/m02-failure-modes.js"></script>
+<script src="content/m03-threat-modelling.js"></script>
+<script src="content/m04-detection.js"></script>
+<script src="content/m05-m11-stubs.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
